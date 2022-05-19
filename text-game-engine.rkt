@@ -3,13 +3,11 @@
 (define nodes
   '(
     (living-room
-     (you are in the living-room.
-          a wizard is snoring loudly on the couch.))
+     (you are in the living-room. a wizard is snoring loudly on the couch.))
     (garden
      (you are in a beautiful garden. there is a well in front of you.))
     (attic
-     (you are in the attic.
-          there is a giant welding torch in the corner.))))
+     (you are in the attic. there is a giant welding torch in the corner.))))
 
 (define edges '(
                 (living-room (garden west door) (attic upstairs ladder))
@@ -38,7 +36,18 @@
          (map (λ (edge) (describe-path edge))
               (cdr (assoc location edges)))))
 
-;;(define objects-at (loc objs obj-locs)
+;;(defun objects-at (loc objs obj-locs)
+;; (labels ((at-loc-p (obj)
+;; (eq (cadr (assoc obj obj-locs)) loc)))
+;; (remove-if-not #'at-loc-p objs)))
+
+
+(define objects-at (loc objs obj-locs)
+  (define (at-loc-p? obj)
+    (eq? (cadr (assoc obj obj-locs)) loc))
+  (filter at-loc-p? objs))
+  
+
 
 ;;(remove-if-not)
 
