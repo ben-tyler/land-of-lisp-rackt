@@ -20,7 +20,7 @@
                            (whiskey living-room)
                            (bucket living-room)
                            (chain garden)
-                           (from garden)))
+                           (frog garden)))
 
 (define (describe-location location nodes)
   (cadr (assoc location nodes)))
@@ -30,7 +30,6 @@
 
 ;;(define (describe-paths location edges)
 ;;  (apply #'append (mapcar #'describe-path (cdr (assoc location edges)))))
-
 (define (describe-paths location edges)
   (apply append 
          (map (λ (edge) (describe-path edge))
@@ -40,21 +39,19 @@
 ;; (labels ((at-loc-p (obj)
 ;; (eq (cadr (assoc obj obj-locs)) loc)))
 ;; (remove-if-not #'at-loc-p objs)))
-
-
-(define objects-at (loc objs obj-locs)
+(define (objects-at loc objs obj-locs)
+  (define (get-location-of-object current-obj)
+        (cadr (assoc current-obj obj-locs))) 
   (define (at-loc-p? obj)
-    (eq? (cadr (assoc obj obj-locs)) loc))
-  (filter at-loc-p? objs))
-  
+    (eq? loc (get-location-of-object obj)))
+  (filter (λ (i) (at-loc-p? i)) objs))
 
 
-;;(remove-if-not)
-
-(describe-paths 'living-room edges)
-
-                        
-
+"descrive paths living room"
+(describe-paths 'living-room edges)                        
+"describe path garden west door"
 (describe-path '(garden west door))
-
+"describe location living room"
 (describe-location 'living-room nodes)
+"objects at living room"
+(objects-at 'living-room objects object-locations)

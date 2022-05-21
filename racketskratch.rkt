@@ -7,8 +7,10 @@
                            (whiskey living-room)
                            (bucket living-room)
                            (chain garden)
-                           (from garden)))
+                           (frog garden)))
 
+#;
+(define (doo)
 (define (bucket) (cadr objects))
 (bucket)
 
@@ -23,17 +25,31 @@
 
 (filter at-loc-p-test? objects)
 
-;;(define (get-object-
-
-;;associate object with location 
 (define (get-location-of-object obj obj-locs)
   (cadr (assoc obj obj-locs)))
-"FOOOO"
-(associate-object-with-location 'bucket object-locations) 
+(get-location-of-object 'bucket object-locations) 
+  )
+
 
 (define (objects-at loc objs obj-locs)
-  (define (at-loc-p? obj)
-    (not (eq? obj 'bucket)))
-  (filter at-loc-p? objs))
 
-(objects-at 'garden objects object-locations)
+  (define (get-location-of-object current-obj)
+        (cadr (assoc current-obj obj-locs))) 
+
+  (define (at-loc-p? obj)
+    (eq? loc
+            (get-location-of-object obj)))
+
+  (filter (λ (i) (at-loc-p? i)) objs))
+  ;;((λ (a) (eq? a loc)) 'garden))
+;;((λ (a b) (eq? a b)) 'a 'b))
+;;  (filter
+;;   ((λ (a b) (eq? a 'b)) '(a b c))
+  ;;(filter
+  ;; (λ (arg)
+  ;;   (eq? (get-location-of-object arg) loc)) obj-locs))
+  
+  ;;(filter at-loc-p? objs))
+  ;;(get-location-of-object (car objs) obj-locs)
+;;  (at-loc-p? 'bucket)) ;; is th bucket in the garden?
+(objects-at 'living-room objects object-locations)
