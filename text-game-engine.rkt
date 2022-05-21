@@ -44,14 +44,21 @@
         (cadr (assoc current-obj obj-locs))) 
   (define (at-loc-p? obj)
     (eq? loc (get-location-of-object obj)))
-  (filter (λ (i) (at-loc-p? i)) objs))
+  (filter at-loc-p? objs))
 
+(define (describe-objects loc objs obj-loc)
+  (define (describe-obj obj)
+    `(you see a ,obj on the floor.))
+  
+  (append (map describe-obj (objects-at loc objs obj-loc))))
 
-"descrive paths living room"
-(describe-paths 'living-room edges)                        
-"describe path garden west door"
-(describe-path '(garden west door))
-"describe location living room"
-(describe-location 'living-room nodes)
-"objects at living room"
-(objects-at 'living-room objects object-locations)
+(describe-objects 'living-room objects object-locations)
+
+;;"descrive paths living room"
+;;(describe-paths 'living-room edges)                        
+;;"describe path garden west door"
+;;(describe-path '(garden west door))
+;;"describe location living room"
+;;(describe-location 'living-room nodes)
+;;"objects at living room"
+;;(objects-at 'living-room objects object-locations)
