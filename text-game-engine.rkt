@@ -1,5 +1,5 @@
 #lang racket
-
+(define location 'living-room)
 (define nodes
   '(
     (living-room
@@ -49,11 +49,17 @@
 (define (describe-objects loc objs obj-loc)
   (define (describe-obj obj)
     `(you see a ,obj on the floor.))
-  
   (append (map describe-obj (objects-at loc objs obj-loc))))
 
-(describe-objects 'living-room objects object-locations)
 
+(define (look)
+    (append
+        (describe-location location nodes)
+        (describe-paths location edges)
+        (describe-objects location objects object-locations)))
+(look)
+;;"describe objects living room"
+;;(describe-objects 'living-room objects object-locations)
 ;;"descrive paths living room"
 ;;(describe-paths 'living-room edges)                        
 ;;"describe path garden west door"
