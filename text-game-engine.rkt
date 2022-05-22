@@ -49,15 +49,28 @@
 (define (describe-objects loc objs obj-loc)
   (define (describe-obj obj)
     `(you see a ,obj on the floor.))
-  (append (map describe-obj (objects-at loc objs obj-loc))))
+  (apply append
+         (map describe-obj (objects-at loc
+                                       objs
+                                       obj-loc))))
 
 
 (define (look)
-    (append
-        (describe-location location nodes)
-        (describe-paths location edges)
-        (describe-objects location objects object-locations)))
-(look)
+  (~a (append (describe-location location
+                                 nodes)
+              (describe-paths location
+                              edges)
+              (describe-objects location
+                                objects
+                                object-locations))))
+
+;;(define dl (describe-location location nodes))
+;;(define dp (describe-paths location edges))
+;;(define do (describe-objects location objects object-locations))
+
+(define (walk direction)
+  '())
+;;(look)
 ;;"describe objects living room"
 ;;(describe-objects 'living-room objects object-locations)
 ;;"descrive paths living room"
