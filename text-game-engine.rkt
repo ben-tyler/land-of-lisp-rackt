@@ -1,26 +1,8 @@
 #lang racket
+(require "text-game-data.rkt")
+
 (define location 'living-room)
-(define nodes
-  '(
-    (living-room
-     (you are in the living-room. a wizard is snoring loudly on the couch.))
-    (garden
-     (you are in a beautiful garden. there is a well in front of you.))
-    (attic
-     (you are in the attic. there is a giant welding torch in the corner.))))
-
-(define edges '(
-                (living-room (garden west door) (attic upstairs ladder))
-                (garden (living-room east door))
-                (attic (living-room downstairs ladder))))
-
-(define objects '(whiskey bucket frog chain))
-
-(define object-locations '(
-                           (whiskey living-room)
-                           (bucket living-room)
-                           (chain garden)
-                           (frog garden)))
+(define inventory '())
 
 (define (describe-location location nodes)
   (cadr (assoc location nodes)))
@@ -28,17 +10,11 @@
 (define (describe-path edge)
   `(there is a ,(caddr edge) going ,(cadr edge) from here.))
 
-;;(define (describe-paths location edges)
-;;  (apply #'append (mapcar #'describe-path (cdr (assoc location edges)))))
 (define (describe-paths location edges)
   (apply append 
          (map (λ (edge) (describe-path edge))
               (cdr (assoc location edges)))))
 
-;;(defun objects-at (loc objs obj-locs)
-;; (labels ((at-loc-p (obj)
-;; (eq (cadr (assoc obj obj-locs)) loc)))
-;; (remove-if-not #'at-loc-p objs)))
 (define (objects-at loc objs obj-locs)
   (define (get-location-of-object current-obj)
         (cadr (assoc current-obj obj-locs))) 
@@ -64,20 +40,29 @@
                                 objects
                                 object-locations))))
 
-;;(define dl (describe-location location nodes))
-;;(define dp (describe-paths location edges))
-;;(define do (describe-objects location objects object-locations))
 
 (define (walk direction)
-  '())
-;;(look)
-;;"describe objects living room"
-;;(describe-objects 'living-room objects object-locations)
-;;"descrive paths living room"
-;;(describe-paths 'living-room edges)                        
-;;"describe path garden west door"
-;;(describe-path '(garden west door))
-;;"describe location living room"
-;;(describe-location 'living-room nodes)
-;;"objects at living room"
-;;(objects-at 'living-room objects object-locations)
+  (define (get-available-paths)
+    (cdr (assoc location edges)))
+  (define (find-direction)
+    (findf (λ (i) (eq? (cadr i) direction))(get-available-paths)))
+  (cond [(not (eq? (find-direction) #f)) (begin
+                                           (set! location (car (find-direction))))
+                                         (look)]
+        [else '(you can not go that way)]))
+
+(define (pickup object)
+  (cond [(member object
+                 (objects-at location objects object-locations))
+         (begin
+           (set! inventory (cons `( ,object . body ) object-locations)))
+         (printf (~a `(you are now carrying the ,object)))
+         ]
+        [else '(you can not get that)]))
+
+(pickup 'whiskey)
+(define (game-repl)
+  ;;(loop (print (eval (read)))))
+  (define (cmd) (game-read))
+  (game-print (game-eval cmd))
+  
